@@ -63,13 +63,23 @@ module.exports = app;
 
 var app = angular.module('flapperNews', []);
 
+app.factory('posts', [function () {
+  var o = {
+    posts: [],
+  };
+
+  return o;
+},]);
+
 app.controller('MainCtrl', [
   '$scope',
-  function ($scope) {
+  'posts',
+  function ($scope, posts) {
     $scope.test = 'Hello world!';
 
     // $scope variable exposes controller variables and functions to templates
-    $scope.posts = [
+    $scope.posts = posts.posts;
+    /*$scope.posts = [
       { title: 'post 1', upvotes: 5 },
       { title: 'post 2', upvotes: 2 },
       { title: 'post 3', upvotes: 15 },
@@ -77,17 +87,22 @@ app.controller('MainCtrl', [
       { title: 'post 5', upvotes: 4 },
       // trailing comma removed by transpiler e.g Babel
       // https://github.com/airbnb/javascript#commas--dangling
-    ];
+    ];*/
+
     $scope.addPost = function () {
       if (!$scope.title || $scope.title === '') {
         console.log('Empty bruv!');
         return;
       }
+
       $scope.posts.push({ title: $scope.title, link: $scope.link, upvotes: 0 });
       $scope.title = '';
       $scope.link = '';
     };
+
     $scope.incrementUpvotes = function (post) { // parameter is current post by reference
       post.upvotes += 1;
+      // Shows two-way data-bind as updates to scope are reflected in posts
+      console.log(posts.posts);
     };
-  }]);
+  },]);
