@@ -5,6 +5,17 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+// MongoDB & Mongoose schema
+var mongoose = require('mongoose');
+
+// The index.js file is executed where your app.js file calls:
+// var routes = require('./routes');
+// So be sure that's being called after your schemas are registered
+require('./models/Posts');
+require('./models/Comments');
+
+mongoose.connect('mongodb://localhost/news');
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -55,7 +66,6 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;
 
